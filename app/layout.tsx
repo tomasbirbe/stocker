@@ -1,4 +1,4 @@
-import Layout from "./components/Layout";
+import Nav from "./MainLayout";
 import "./globals.css";
 
 export default function RootLayout({
@@ -11,8 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-full flex">
-        <Layout className="bg-red-500 w-[200px]" />
-        {children}
+        <Nav>
       </body>
     </html>
   );
