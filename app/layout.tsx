@@ -1,3 +1,4 @@
+"use client";
 import Nav from "./Nav";
 import "./globals.css";
 
@@ -10,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="w-full flex">
+      <body className="w-full flex relative">
         <Nav />
         {children}
       </body>
