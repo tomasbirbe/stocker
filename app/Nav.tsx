@@ -1,24 +1,25 @@
 import NavSubMenu from "./NavSubMenu";
 import NavLink from "./NavLink";
-import Image from "next/image";
 import { useState } from "react";
+import { AiOutlineArrowLeft, AiOutlineMenu } from "react-icons/ai";
 
 export default function Nav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   function toggleNav() {
-    console.log(isNavOpen);
     setIsNavOpen((prevState) => !prevState);
   }
 
   return (
     <>
       {isNavOpen ? (
-        <nav className="w-[200px] absolute h-full top-0 left-0">
-          <div className="w-full h-[50px] bg-red-500 flex justify-end">
-            <button onClick={toggleNav}>Back</button>
+        <nav className="w-[180px] absolute h-full top-0 left-0 dark:bg-dark">
+          <div className="w-full pr-4 h-[50px] dark:bg-primary-dark flex justify-end">
+            <button onClick={toggleNav}>
+              <AiOutlineArrowLeft color="white" size={20} />
+            </button>
           </div>
-          <ul>
+          <NavSubMenu className="pt-4">
             <NavLink href="/catalogue">Catalogo</NavLink>
             <NavSubMenu>
               <NavLink href="/catalogue/add">Agregar</NavLink>
@@ -29,11 +30,11 @@ export default function Nav() {
               <NavLink href="/stock/add">Agregar</NavLink>
               <NavLink href="/stock/delete">Borrar</NavLink>
             </NavSubMenu>
-          </ul>
+          </NavSubMenu>
         </nav>
       ) : (
         <button className="absolute top-5 left-4 h-fit w-fit" onClick={toggleNav}>
-          <Image alt="menu icon" height={25} src="/icons/menu.svg" width={25} />
+          <AiOutlineMenu color="white" size={25} />
         </button>
       )}
     </>

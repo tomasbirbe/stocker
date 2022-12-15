@@ -10,8 +10,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="w-full flex relative">
+    <html className="dark dark:text-light" lang="en">
+      <body className="w-full flex relative dark:bg-dark">
         <Nav />
         {children}
       </body>
