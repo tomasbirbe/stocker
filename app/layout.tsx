@@ -1,4 +1,4 @@
-import Nav from "./MainLayout";
+import Nav from "./Nav";
 import "./globals.css";
 
 export default function RootLayout({
@@ -11,7 +11,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-full flex">
-        <Nav>
+        <Nav />
+        {children}
       </body>
     </html>
   );
