@@ -19,18 +19,20 @@ export default function Nav() {
               <AiOutlineArrowLeft color="white" size={20} />
             </button>
           </div>
-          <NavSubMenu className="pt-4">
-            <NavLink href="/catalogue">Catalogo</NavLink>
-            <NavSubMenu>
-              <NavLink href="/catalogue/add">Agregar</NavLink>
-              <NavLink href="/catalogue/delete">Borrar</NavLink>
-            </NavSubMenu>
-            <NavLink href="/stock">Stock</NavLink>
-            <NavSubMenu>
-              <NavLink href="/stock/add">Agregar</NavLink>
-              <NavLink href="/stock/delete">Borrar</NavLink>
-            </NavSubMenu>
-          </NavSubMenu>
+          <ul>
+            <ul className="pt-4 pl-4 flex flex-col gap-4">
+              <NavLink href="/catalogue">Catalogo</NavLink>
+              <NavSubMenu>
+                <NavLink href="/catalogue/add">Agregar</NavLink>
+                <NavLink href="/catalogue/delete">Borrar</NavLink>
+              </NavSubMenu>
+              <NavLink href="/stock">Stock</NavLink>
+              <NavSubMenu>
+                <NavLink href="/stock/add">Agregar</NavLink>
+                <NavLink href="/stock/delete">Borrar</NavLink>
+              </NavSubMenu>
+            </ul>
+          </ul>
         </nav>
       ) : (
         <button className="absolute top-5 left-4 h-fit w-fit" onClick={toggleNav}>

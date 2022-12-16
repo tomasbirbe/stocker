@@ -8,9 +8,9 @@ export default function NavSubMenu({
   className?: string;
 }) {
   return (
-    <li>
+    <li className="">
       <p>{title}</p>
-      <ul className={`${className} pl-5 flex flex-col gap-5`}>{children}</ul>
+      <ul className={`${className} pl-5 flex flex-col gap-5 w-fit`}>{children}</ul>
     </li>
   );
 }
