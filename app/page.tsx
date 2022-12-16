@@ -1,7 +1,7 @@
 export default function Page() {
   return (
-    <>
-      <h1 className="text-red-500">This is NextJS with App directory!</h1>
-    </>
+    <main className="h-full flex justify-center items-center w-full">
+      <h1>Welcome to Stocker!</h1>
+    </main>
   );
 }
