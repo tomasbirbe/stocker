@@ -12,34 +12,44 @@ enum Mode {
   REMOVE,
 }
 
+function checkAmount(description: string, products: Product[]) {
+  const productFinded = products.find((product) => product.description === description);
+
+  return productFinded?.amount;
+}
+
+function exist(description: string, products: Product[]) {
+  if (products.find((product) => description === product.description)) {
+    return true;
+  }
+
+  return false;
+}
+
 export default function Catalogue() {
   const [products, setProducts] = useState<Product[]>([]);
   const [mode, setMode] = useState<Mode>(Mode.ADD);
-
-  function toggleMode() {
-    setMode((mode) => {
-      if (mode === Mode.ADD) {
-        return Mode.REMOVE;
-      }
-
-      return Mode.ADD;
-    });
-  }
-
-  function addMode() {
-    setMode(Mode.ADD);
-  }
-
-  function removeMode() {
-    setMode(Mode.REMOVE);
-  }
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const input = (event.target as HTMLFormElement).input.value;
 
+    if (input.trim() === "agregar") {
+      setMode(Mode.ADD);
+      (event.target as HTMLFormElement).input.value = "";
+
+      return undefined;
+    }
+
+    if (input.trim() === "borrar") {
+      setMode(Mode.REMOVE);
+      (event.target as HTMLFormElement).input.value = "";
+
+      return undefined;
+    }
+
     if (mode === Mode.ADD) {
-      if (exist(input)) {
+      if (exist(input, products)) {
         setProducts((prevState) =>
           prevState.map((product) => {
             if (input.trim() === product.description) {
@@ -60,34 +70,44 @@ export default function Catalogue() {
         ]);
       }
     } else {
-      if (exist(input)) {
-        setProducts((prevProducts) => prevProducts.map((product) => {
-          if(product.description === input.trim()) {
-            
-          }
-        }));
+      if (exist(input, products)) {
+        const productSearched = products.find((product) => product.description === input.trim());
+
+        if (productSearched && productSearched.amount > 1) {
+          setProducts((prevProducts) =>
+            prevProducts.map((product) => {
+              if (product.description === productSearched.description) {
+                return {
+                  ...product,
+                  amount: product.amount - 1,
+                };
+              }
+
+              return product;
+            }),
+          );
+        } else if (productSearched) {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.description !== productSearched?.description),
+          );
+        }
       }
     }
 
     (event.target as HTMLFormElement).input.value = "";
   }
 
-  function exist(description: string) {
-    if (products.find((product) => description === product.description)) {
-      return true;
-    }
-
-    return false;
-  }
-
   return (
     <main>
-      <button onClick={toggleMode}>{mode === Mode.ADD ? "Remover" : "Agregar"}</button>
-      <form onSubmit={handleSubmit}>
-        <input autoFocus className="bg-black" id="input" type="text" />
-        <button type="submit">Enviar</button>
-      </form>
+      {/* <button onClick={toggleMode}>{mode === Mode.ADD ? "Remover" : "Agregar"}</button> */}
       <div className="mt-[60px]">
+        <div className="flex flex-col items-center gap-[15px] justify-center mb-[20px]">
+          <p>{mode === Mode.REMOVE ? "Borrando" : "Agregando"}</p>
+          <form onSubmit={handleSubmit}>
+            <input autoFocus className="bg-black border-white border" id="input" type="text" />
+            <button type="submit" />
+          </form>
+        </div>
         <ul className="grid grid-cols-12 " id="theader">
           <li className="border-red-500 border col-span-9 text-center">Producto</li>
           <li className="border-green-500 border col-span-3 text-center">Cantidad</li>
