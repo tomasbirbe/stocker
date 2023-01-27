@@ -1,15 +1,26 @@
 import { Input } from "@/components/Input";
+import { PrimaryButton } from "@/components/PrimaryButton";
+
+type Catalogue = {
+  barcode: string;
+  description: string;
+};
+
+const catalogue = [{ barcode: "13241234", description: "monitor" }];
 
 export default function CatalogoPage() {
   return (
     <main className="pt-[70px]">
-      <form className="mx-auto w-[200px] flex flex-col items-center gap-[30px]">
-        <Input label="Codigo de barras" />
+      <form className="mx-auto w-[250px] flex flex-col items-center gap-[30px]">
+        <Input autoFocus label="Codigo de barras" />
         <Input label="Descripcion del producto" />
-        <button className="dark:bg-primary-dark-500 px-2 py-2 rounded-[4px] dark:text-text-color-light">
-          Agregar al catalogo
-        </button>
+        <PrimaryButton>Agregar al catalogo</PrimaryButton>
       </form>
+      <ul>
+        {catalogue.map((product) => (
+          <li key={product.barcode}>{product.description}</li>
+        ))}
+      </ul>
     </main>
   );
 }
