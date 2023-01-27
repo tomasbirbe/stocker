@@ -11,8 +11,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        backfill: { dark: "#242424" },
-        "text-color": { dark: "#C0C0C0" },
+        backfill: {
+          dark: {
+            400: "#333333",
+            500: "#242424",
+          },
+          light: {
+            500: "#EFEFEF",
+          },
+        },
+        primary: {
+          dark: {
+            500: "#74A4BC",
+          },
+        },
+        "text-color": { dark: "#C0C0C0", light: "#0A0A0A" },
       },
     },
   },
