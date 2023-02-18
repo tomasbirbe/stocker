@@ -64,12 +64,12 @@ export default function CatalogoPage() {
           onSubmit={handleEditSubmit}
         />
       )}
-      <h1 className="text-center w-full text-[24px] bold py-4">Catalogo</h1>
-      <ul className="flex flex-col justify-center p-2 gap-1">
+      <h1 className="bold w-full py-4 text-center text-[24px]">Catalogo</h1>
+      <ul className="flex flex-col justify-center gap-1 p-2">
         {catalogue.map((product) => (
           <li
             key={product.barcode}
-            className="dark:bg-backfill-dark-400 py-4 px-2 rounded-[2px] flex justify-between"
+            className="flex justify-between rounded-[2px] py-4 px-2 dark:bg-backfill-dark-400"
           >
             <p className="overflow-hidden pr-2">{product.description}</p>
             <div className="flex gap-2">
@@ -81,7 +81,7 @@ export default function CatalogoPage() {
       </ul>
       <Portal>
         <button
-          className="dark:bg-primary-dark-500 rounded-full w-[45px] h-[45px] fixed bottom-5 right-5 text-black"
+          className="fixed bottom-5 right-5 h-[45px] w-[45px] rounded-full text-black dark:bg-primary-dark-500"
           onClick={openModal}
         >
           +

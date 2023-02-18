@@ -5,7 +5,7 @@ type params = { children: React.ReactNode } & ButtonHTMLAttributes<HTMLButtonEle
 export const PrimaryButton = ({ children, ...props }: params) => {
   return (
     <button
-      className="dark:bg-primary-dark-500 py-2 px-3 font-semibold rounded-[4px] dark:text-color-dark-inverted"
+      className="rounded-[4px] py-2 px-3 font-semibold dark:bg-primary-dark-500 dark:text-color-dark-inverted"
       {...props}
     >
       {children}
