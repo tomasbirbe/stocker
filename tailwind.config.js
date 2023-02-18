@@ -27,7 +27,16 @@ module.exports = {
             500: "#74A4BC",
           },
         },
-        "text-color": { dark: "#C0C0C0", light: "#0A0A0A" },
+        color: {
+          dark: {
+            base: "#C0C0C0",
+            inverted: "#0A0A0A",
+          },
+          light: {
+            base: "##0A0A0A",
+            inverted: "#C0C0C0",
+          },
+        },
       },
     },
   },

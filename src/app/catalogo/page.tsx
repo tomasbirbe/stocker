@@ -11,7 +11,7 @@ export default function CatalogoPage() {
   const [catalogue, setCatalogue] = useState<Product[]>([]);
   const [showModal, openModal, closeModal] = useModal(false);
   const [showEditModal, openEditModal, closeEditModal] = useModal(false);
-  const [editFormData, setEditFormData] = useState<Product>({
+  const [productToEdit, setProductToEdit] = useState<Product>({
     id: "",
     barcode: "",
     description: "",
@@ -19,7 +19,7 @@ export default function CatalogoPage() {
 
   function handleEdit(product: Product) {
     openEditModal();
-    setEditFormData(product);
+    setProductToEdit(product);
   }
 
   function handleEditSubmit(event: React.FormEvent) {
@@ -29,8 +29,8 @@ export default function CatalogoPage() {
 
     setCatalogue((prevCatalogue) =>
       prevCatalogue.map((product) => {
-        if (product.id === editFormData.id) {
-          return { ...editFormData, description, barcode };
+        if (product.id === productToEdit.id) {
+          return { ...productToEdit, description, barcode };
         }
 
         return product;
@@ -59,7 +59,7 @@ export default function CatalogoPage() {
       {showModal && <NewProductModal onClose={closeModal} onSubmit={handleSubmit} />}
       {showEditModal && (
         <EditProductModal
-          product={editFormData}
+          product={productToEdit}
           onClose={closeEditModal}
           onSubmit={handleEditSubmit}
         />

@@ -1,7 +1,7 @@
 import { Input } from "@/components/Input";
 import Portal from "@/components/Portal";
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { useState } from "react";
+import { SecondaryButton } from "@/components/SecondaryButton";
 
 type Props = {
   onSubmit: (e: React.FormEvent) => void;
@@ -9,8 +9,6 @@ type Props = {
 };
 
 export const NewProductModal: React.FC<Props> = ({ onSubmit, onClose }) => {
-  const [showModal, setShowModal] = useState(false);
-
   return (
     <Portal>
       <div className="fixed inset-0 m-auto bg-black/60 cursor-pointer" onClick={onClose} />
@@ -22,9 +20,9 @@ export const NewProductModal: React.FC<Props> = ({ onSubmit, onClose }) => {
           <Input autoFocus required id="description" label="Descripcion del producto" />
           <Input required id="barcode" label="Codigo de barras" />
           <div className="flex flex-row justify-between w-full">
-            <PrimaryButton type="button" onClick={onClose}>
+            <SecondaryButton type="button" onClick={onClose}>
               Cancelar
-            </PrimaryButton>
+            </SecondaryButton>
             <PrimaryButton type="submit">Agregar</PrimaryButton>
           </div>
         </form>

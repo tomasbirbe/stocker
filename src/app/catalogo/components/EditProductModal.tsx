@@ -2,6 +2,7 @@ import { Product } from "@/app/types";
 import { Input } from "@/components/Input";
 import Portal from "@/components/Portal";
 import { PrimaryButton } from "@/components/PrimaryButton";
+import { SecondaryButton } from "@/components/SecondaryButton";
 
 type Props = {
   onSubmit: (e: React.FormEvent) => void;
@@ -27,9 +28,9 @@ export const EditProductModal: React.FC<Props> = ({ onSubmit, onClose, product }
           />
           <Input required defaultValue={product.barcode} id="barcode" label="Codigo de barras" />
           <div className="flex flex-row justify-between w-full">
-            <PrimaryButton type="button" onClick={onClose}>
+            <SecondaryButton type="button" onClick={onClose}>
               Cancelar
-            </PrimaryButton>
+            </SecondaryButton>
             <PrimaryButton type="submit">Agregar</PrimaryButton>
           </div>
         </form>
