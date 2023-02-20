@@ -17,6 +17,7 @@ export default function CatalogoPage() {
     id: "",
     barcode: "",
     description: "",
+    amount: 0,
   });
 
   function handleEditModal(product: Product) {
@@ -41,7 +42,7 @@ export default function CatalogoPage() {
     closeEditModal();
   }
 
-  function handleOpenConfirmModal(product: Product) {
+  function handleConfirmModal(product: Product) {
     openConfirmModal();
     setProductSelected(product);
   }
@@ -52,13 +53,15 @@ export default function CatalogoPage() {
 
     setCatalogue((prevCatalogue) => [
       ...prevCatalogue,
-      { id: self.crypto.randomUUID().toString(), barcode, description },
+      { id: self.crypto.randomUUID().toString(), barcode, description, amount: 0 },
     ]);
     closeModal();
   }
 
-  function handleDelete(id: string) {
-    setCatalogue((prevCatalogue) => prevCatalogue.filter((product) => product.id !== id));
+  function handleDelete() {
+    setCatalogue((prevCatalogue) =>
+      prevCatalogue.filter((product) => product.id !== productSelected.id),
+    );
     closeConfirmModal();
   }
 
@@ -72,6 +75,13 @@ export default function CatalogoPage() {
           onSubmit={handleEditSubmit}
         />
       )}
+      {showConfirmModal && (
+        <ConfirmModal
+          productDescription={productSelected.description}
+          onCancel={closeConfirmModal}
+          onConfirm={handleDelete}
+        />
+      )}
       <h1 className="bold w-full py-4 text-center text-[24px]">Catalogo</h1>
       <ul className="flex flex-col justify-center gap-1 p-2">
         {catalogue.map((product) => (
@@ -79,17 +89,10 @@ export default function CatalogoPage() {
             key={product.id}
             className="flex justify-between rounded-[2px] py-4 px-2 dark:bg-backfill-dark-400"
           >
-            {showConfirmModal && productSelected.id === product.id && (
-              <ConfirmModal
-                productDescription={productSelected.description}
-                onCancel={closeConfirmModal}
-                onConfirm={() => handleDelete(product.id)}
-              />
-            )}
             <p className="overflow-hidden pr-2">{product.description}</p>
             <div className="flex gap-2">
               <button onClick={() => handleEditModal(product)}>Editar</button>
-              <button onClick={() => handleOpenConfirmModal(product)}>Borrar</button>
+              <button onClick={() => handleConfirmModal(product)}>Borrar</button>
             </div>
           </li>
         ))}
