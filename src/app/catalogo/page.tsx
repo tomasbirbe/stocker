@@ -6,20 +6,22 @@ import type { Product } from "@/app/types";
 import { EditProductModal } from "./components/EditProductModal";
 import { getInputValuesFromEvent } from "../utils";
 import { useModal } from "@/hooks/useModal";
+import { ConfirmModal } from "./components/ConfirmModal";
 
 export default function CatalogoPage() {
   const [catalogue, setCatalogue] = useState<Product[]>([]);
   const [showModal, openModal, closeModal] = useModal(false);
   const [showEditModal, openEditModal, closeEditModal] = useModal(false);
-  const [productToEdit, setProductToEdit] = useState<Product>({
+  const [showConfirmModal, openConfirmModal, closeConfirmModal] = useModal(false);
+  const [productSelected, setProductSelected] = useState<Product>({
     id: "",
     barcode: "",
     description: "",
   });
 
-  function handleEdit(product: Product) {
+  function handleEditModal(product: Product) {
     openEditModal();
-    setProductToEdit(product);
+    setProductSelected(product);
   }
 
   function handleEditSubmit(event: React.FormEvent) {
@@ -29,14 +31,19 @@ export default function CatalogoPage() {
 
     setCatalogue((prevCatalogue) =>
       prevCatalogue.map((product) => {
-        if (product.id === productToEdit.id) {
-          return { ...productToEdit, description, barcode };
+        if (product.id === productSelected.id) {
+          return { ...productSelected, description, barcode };
         }
 
         return product;
       }),
     );
     closeEditModal();
+  }
+
+  function handleOpenConfirmModal(product: Product) {
+    openConfirmModal();
+    setProductSelected(product);
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -50,8 +57,9 @@ export default function CatalogoPage() {
     closeModal();
   }
 
-  function handleDelete(barcode: string) {
-    setCatalogue((prevCatalogue) => prevCatalogue.filter((product) => product.barcode !== barcode));
+  function handleDelete(id: string) {
+    setCatalogue((prevCatalogue) => prevCatalogue.filter((product) => product.id !== id));
+    closeConfirmModal();
   }
 
   return (
@@ -59,7 +67,7 @@ export default function CatalogoPage() {
       {showModal && <NewProductModal onClose={closeModal} onSubmit={handleSubmit} />}
       {showEditModal && (
         <EditProductModal
-          product={productToEdit}
+          product={productSelected}
           onClose={closeEditModal}
           onSubmit={handleEditSubmit}
         />
@@ -68,13 +76,20 @@ export default function CatalogoPage() {
       <ul className="flex flex-col justify-center gap-1 p-2">
         {catalogue.map((product) => (
           <li
-            key={product.barcode}
+            key={product.id}
             className="flex justify-between rounded-[2px] py-4 px-2 dark:bg-backfill-dark-400"
           >
+            {showConfirmModal && productSelected.id === product.id && (
+              <ConfirmModal
+                productDescription={productSelected.description}
+                onCancel={closeConfirmModal}
+                onConfirm={() => handleDelete(product.id)}
+              />
+            )}
             <p className="overflow-hidden pr-2">{product.description}</p>
             <div className="flex gap-2">
-              <button onClick={() => handleEdit(product)}>Editar</button>
-              <button onClick={() => handleDelete(product.barcode)}>Borrar</button>
+              <button onClick={() => handleEditModal(product)}>Editar</button>
+              <button onClick={() => handleOpenConfirmModal(product)}>Borrar</button>
             </div>
           </li>
         ))}
