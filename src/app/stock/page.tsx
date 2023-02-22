@@ -53,10 +53,7 @@ const catalogue: Product[] = [
 export default function StockPage() {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [stock, setStock] = useState<Product[]>(catalogue);
-
-  useEffect(() => {
-    console.log(stock);
-  }, [stock, movements]);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const lastMovement = movements[movements.length - 1];
@@ -104,6 +101,8 @@ export default function StockPage() {
     const product = catalogue.find((product) => product.barcode === barcode);
 
     if (product === undefined) {
+      setIsError(true);
+
       return null;
     }
 
@@ -116,18 +115,22 @@ export default function StockPage() {
 
     setMovements((prevMovements) => [...prevMovements, newMovement]);
     clearInputValues(event, ["amount"]);
+    setIsError(false);
   }
 
   return (
-    <main className="relative">
+    <main className="relative flex flex-col gap-[30px]">
       <h1 className="bold w-full py-4 text-center text-[24px]">Catalogo</h1>
       <form
-        className="mx-auto flex w-[300px] flex-col items-center justify-center gap-[30px]"
+        className="mx-auto flex w-[300px] flex-col items-center justify-center gap-[25px]"
         onSubmit={handleMovementSubmit}
       >
-        <div className="flex w-full justify-between">
-          <Input autoFocus required className="w-[70%]" id="barcode" label="Codigo de barras" />
-          <Input required className="w-[20%]" defaultValue={1} id="amount" label="Cantidad" />
+        <div>
+          <div className="flex w-full justify-between">
+            <Input autoFocus required className="w-[70%]" id="barcode" label="Codigo de barras" />
+            <Input required className="w-[20%]" defaultValue={1} id="amount" label="Cantidad" />
+          </div>
+          {isError && <small className="text-[14px] text-red-500">Ese producto no existe</small>}
         </div>
         <PrimaryButton className="w-full" type="submit">
           Agregar
@@ -142,9 +145,6 @@ export default function StockPage() {
             <p className="overflow-hidden pr-2">
               {movement.product.description} X {movement.amount}
             </p>
-            {/* <div className="flex gap-2">
-              <button onClick={() => handleUndo(movement.id)}>Undo</button>
-            </div> */}
           </li>
         ))}
       </ul>
