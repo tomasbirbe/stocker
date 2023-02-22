@@ -50,10 +50,16 @@ const catalogue: Product[] = [
   },
 ];
 
+enum Mode {
+  ADD,
+  REMOVE,
+}
+
 export default function StockPage() {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [stock, setStock] = useState<Product[]>(catalogue);
   const [isError, setIsError] = useState(false);
+  const [mode, setMode] = useState(Mode.ADD);
 
   useEffect(() => {
     const lastMovement = movements[movements.length - 1];
@@ -78,7 +84,7 @@ export default function StockPage() {
           throw new Error("That product doesn't exist");
         }
 
-        if (lastMovement.product.amount > productToUpdate.amount) {
+        if (lastMovement.amount > productToUpdate.amount) {
           throw new Error("There aren't enough amount of that product to remove");
         }
 
@@ -95,10 +101,30 @@ export default function StockPage() {
     }
   }, [movements]);
 
+  function toggleMode() {
+    if (mode === Mode.ADD) {
+      setMode(Mode.REMOVE);
+    } else {
+      setMode(Mode.ADD);
+    }
+  }
+
   function handleMovementSubmit(event: React.FormEvent) {
     event.preventDefault();
     const { barcode, amount } = getInputValuesFromEvent(event);
     const product = catalogue.find((product) => product.barcode === barcode);
+
+    if (barcode.trim() === "restar") {
+      setMode(Mode.REMOVE);
+
+      return null;
+    }
+
+    if (barcode.trim() === "agregar") {
+      setMode(Mode.ADD);
+
+      return null;
+    }
 
     if (product === undefined) {
       setIsError(true);
@@ -106,16 +132,29 @@ export default function StockPage() {
       return null;
     }
 
-    const newMovement = {
-      id: self.crypto.randomUUID().toString(),
-      product,
-      type: MovementType.ADD,
-      amount: Number(amount),
-    };
+    if (mode === Mode.ADD) {
+      const newMovement = {
+        id: self.crypto.randomUUID().toString(),
+        product,
+        type: MovementType.ADD,
+        amount: Number(amount),
+      };
 
-    setMovements((prevMovements) => [...prevMovements, newMovement]);
-    clearInputValues(event, ["amount"]);
-    setIsError(false);
+      setMovements((prevMovements) => [...prevMovements, newMovement]);
+      clearInputValues(event, ["amount"]);
+      setIsError(false);
+    } else {
+      const newMovement = {
+        id: self.crypto.randomUUID().toString(),
+        product,
+        type: MovementType.REMOVE,
+        amount: Number(amount),
+      };
+
+      setMovements((prevMovements) => [...prevMovements, newMovement]);
+      clearInputValues(event, ["amount"]);
+      setIsError(false);
+    }
   }
 
   return (
@@ -132,9 +171,20 @@ export default function StockPage() {
           </div>
           {isError && <small className="text-[14px] text-red-500">Ese producto no existe</small>}
         </div>
-        <PrimaryButton className="w-full" type="submit">
-          Agregar
-        </PrimaryButton>
+        <div className="flex-col flex gap-[15px] w-full">
+          <SecondaryButton className="w-full" type="button" onClick={toggleMode}>
+            Cambiar modo
+          </SecondaryButton>
+          {mode === Mode.ADD ? (
+            <PrimaryButton className="w-full" type="submit">
+              Agregar
+            </PrimaryButton>
+          ) : (
+            <PrimaryButton className="w-full dark:bg-red-400" type="submit">
+              Restar
+            </PrimaryButton>
+          )}
+        </div>
       </form>
       <ul className="flex flex-col justify-center gap-1 p-2">
         {movements.map((movement) => (
